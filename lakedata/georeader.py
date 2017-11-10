@@ -27,7 +27,7 @@ def getNHDWaterbodies(NHD_dir, coded=True):
     codedbfile    = "NHDFCode.dbf"
 
     # remove trailing slash
-    if NHD_dir[-1] == "/"
+    if (NHD_dir[-1] == "/"):
         NHD_dir = NHD_dir[:-1]
 
     
