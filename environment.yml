@@ -8,8 +8,10 @@ dependencies:
 - branca=0.2.0=py_1
 - descartes=1.1.0=py35_0
 - folium=0.5.0=py_0
+- fuzzywuzzy=0.15.1=py35_0
 - geopandas=0.3.0=py35_0
 - libspatialindex=1.8.5=1
+- python-levenshtein=0.12.0=py35_0
 - rtree=0.8.3=py35_0
 - vega=0.4.4=py35_1
 - affine=2.1.0=pyh128a3a6_1
