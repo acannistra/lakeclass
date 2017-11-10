@@ -5,10 +5,12 @@ Utilities for processing (loading, cropping, combining, displaying)
 Sentinel-2 images. 
 
 '''
+import rasterio
 from rasterio import mask
 from functools import partial
 import pyproj
 from shapely.ops import transform
+from shapely.geometry import mapping
 import numpy as np
 
 def _stackBands(bands):
@@ -36,9 +38,6 @@ def _stackBands(bands):
 
     return (stack)
 
-def stackBandsToFile(bands, outfile):
-    pass # do this 
-
 def extractGeom(geom, raster, geom_epsg):
     '''
     extracts the geometry geom from the raster, returns the masked array 
@@ -56,12 +55,12 @@ def extractGeom(geom, raster, geom_epsg):
     '''
 
     project_fun = partial(pyproj.transform, 
-                          pyproj.Proj(init=sourceCRS), 
-                          pyproj.Proj(init=destCRS))
+                          pyproj.Proj(init="epsg:%s" % geom_epsg), 
+                          pyproj.Proj(init=raster.crs['init']))
 
     geom = transform(project_fun, geom)
 
-    return(mask.mask(raster, [shapely.geometry.mapping(geom)], crop=True))
+    return(mask.mask(raster, [mapping(geom)], crop=True))
 
 
 def extractGeomToFile(geom, raster, geom_epsg, file):
