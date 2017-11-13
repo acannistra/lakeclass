@@ -37,10 +37,12 @@ def searchOverlapping(geom, search_args):
                       'https://scihub.copernicus.eu/dhus/')
 
     products = api.query(geom, **search_args)
+    if len(products) == 0: 
+        return(None)
     return(api.to_geodataframe(products))
 
 
-def downloadProduct(product, dest_dir, remove_zip=False):
+def downloadProductSentinel(product, dest_dir, remove_zip=False):
     '''
     download and extract sentinel product zip file. 
 
@@ -54,6 +56,10 @@ def downloadProduct(product, dest_dir, remove_zip=False):
 
     remove_zip: whether to delete zipfile. 
 
+
+    Outputs:
+    -------
+    zipfilepath, imagepath (.SAFE)
     '''
 
     api = SentinelAPI(SENTINEL_USER,
@@ -75,9 +81,35 @@ def downloadProduct(product, dest_dir, remove_zip=False):
 
     dirname = zipfilePath.split('.')[0] + '.SAFE/'
 
-    return(dirname)
+    return(zipfilePath, dirname)
 
 
 
+def downloadProductAWS(productTitle, dest_dir, bands=None, threading=True):
+    '''
+    uses sentinelhub/AWS downloader. (*way* quicker)
+    
+    productTitle is NOT the ID. it's the filename. 
+    
+    bands should be list of integers or none. 
+    '''
+    from sentinelhub import download_safe_format
+    
+    ret_fpath = os.path.join(dest_dir, "%s.SAFE" % productTitle)
+    
+    params = {
+        'product_id' : productTitle,
+        'folder'  : dest_dir, 
+        'threaded_download' : threading
+    }
+    
+    if bands is not None:
+        bands = ["B%02d" %b for b in bands] #S-2 radiometric bands are BXX
+        download_safe_format(bands=bands, **params)
+    else:
+        download_safe_format(**params)
+        
+    return(ret_fpath)
 
+    
 

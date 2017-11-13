@@ -12,6 +12,8 @@ import pyproj
 from shapely.ops import transform
 from shapely.geometry import mapping
 import numpy as np
+import glob
+from os import path
 
 def _stackBands(bands):
     '''
@@ -85,9 +87,15 @@ def extractGeomToFile(geom, raster, geom_epsg, file):
 
 
 
-
-
-
+def openSentinelBands(imgpath, bands):
+    '''
+    Helper for Sentinel-2 file structure + opening multiple band files for reading.
+    '''
+    bandRasts = []
+    for band_id in bands:
+        file = glob.glob(path.join(imgpath, 'GRANULE', '*', "IMG_DATA", '*B%02d.jp2' % band_id))[0]
+        bandRasts.append(rasterio.open(file, 'r'))
+    return(bandRasts)
 
 
 
