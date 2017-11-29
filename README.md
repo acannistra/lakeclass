@@ -1,4 +1,5 @@
-<h1>Lakeclass</h1>
+# Lakeclass
+>*Note: This project is on hold until more time is available to build an image acquisition pipeline. 28 Nov 2017*
 
 **Detecting Algae/Cyanobacteria blooms in Washington Lakes with Satellite Imagery**
 
